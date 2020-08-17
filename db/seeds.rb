@@ -9,7 +9,11 @@ easy_general_knowledge = RestClient.get("https://opentdb.com/api.php?amount=50&c
 parsed = JSON.parse(easy_general_knowledge)
 
 
-parsed["results"].each{ |question| Trivia.create(question)}
+parsed["results"].each do |question|
+  question["incorrect answer"] = question["incorrect answers"].join(", ") 
+  Question.create(question)
+
+end
 
 
 

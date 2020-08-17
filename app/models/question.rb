@@ -1,4 +1,4 @@
-class Trivia < ActiveRecord::Base
+class Question < ActiveRecord::Base
   has_many :answered_questions
   has_many :users, through: :answered_questions
 

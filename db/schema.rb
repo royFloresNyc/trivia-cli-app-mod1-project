@@ -10,17 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_17_195948) do
+ActiveRecord::Schema.define(version: 2020_08_17_214755) do
 
   create_table "answered_questions", force: :cascade do |t|
     t.boolean "answered_correctly"
     t.integer "user_id"
-    t.integer "trivia_id"
-    t.index ["trivia_id"], name: "index_answered_questions_on_trivia_id"
-    t.index ["user_id"], name: "index_answered_questions_on_user_id"
+    t.integer "question_id"
   end
 
-  create_table "trivias", force: :cascade do |t|
+  create_table "questions", force: :cascade do |t|
     t.string "category"
     t.string "type"
     t.string "difficulty"

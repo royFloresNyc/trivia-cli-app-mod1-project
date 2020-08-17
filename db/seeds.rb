@@ -6,4 +6,6 @@ easy_general_knowledge = RestClient.get("https://opentdb.com/api.php?amount=50&c
 parsed = JSON.parse(easy_general_knowledge)
 parsed
 
+Pry.start
+
 

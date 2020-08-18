@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_17_221141) do
+ActiveRecord::Schema.define(version: 2020_08_18_142849) do
 
   create_table "answered_questions", force: :cascade do |t|
     t.boolean "answered_correctly"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2020_08_17_221141) do
     t.string "question"
     t.string "correct_answer"
     t.string "incorrect_answers"
+    t.integer "points_worth"
   end
 
   create_table "users", force: :cascade do |t|
@@ -31,6 +32,7 @@ ActiveRecord::Schema.define(version: 2020_08_17_221141) do
     t.string "password"
     t.integer "total_points"
     t.integer "level"
+    t.integer "chances"
   end
 
 end

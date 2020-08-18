@@ -27,8 +27,11 @@ class CLI
     end
   end
 
+  if choice == "PLAY"
+    Question.
+  end
 
 end
 
 cli = CLI.new
-Pry.start
+#Pry.start

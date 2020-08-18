@@ -1,6 +1,8 @@
 require 'rest-client'
 require 'json'
 require 'pry'
+require 'pry-byebug'
+require_relative '../config/environment'
 
 
 #User.create(username: roy, )
@@ -20,7 +22,7 @@ end
 
 
 
-
-#Pry.start
+# binding.pry
+Pry.start
 
 

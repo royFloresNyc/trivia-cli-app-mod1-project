@@ -1,4 +1,5 @@
 require 'pry'
+require_relative 'cli.rb'
 class User < ActiveRecord::Base
   has_many :answered_questions
   has_many :questions, through: :answered_questions
@@ -32,11 +33,6 @@ class User < ActiveRecord::Base
     user
   end
 
-
-  def play
-
-  end
-
   def view_profile
     puts "username: #{self.username}"
     puts "total points: #{self.total_points}"
@@ -47,10 +43,16 @@ class User < ActiveRecord::Base
   def self.top_ten_by_points
     users = User.order(total_points: :desc).limit(10)
     users.map do |user|
-      "#{user.username}: #{user.total_points}"
+      puts "#{user.username}: #{user.total_points}"
     end
   end
   
+
+  def current_ranking
+    users = User.order(total_points: :desc)
+    index = users.index(self)
+    puts "#{self.username}, you're currently at position #{index + 1}"
+  end
 
   def answered_questions
     AnsweredQuestion.all.filter{ |aq| aq.user_id == self.id}
@@ -72,17 +74,62 @@ class User < ActiveRecord::Base
     end 
   end
 
-  def self.top_10_by_percentage_correct 
-    # user_percentages = User.all.sort_by do |user|
-    #   user.percentage_correct.size
-    # end
+  def self.top_ten_by_percentage_correct 
     user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.map do |user|
       "#{user.username}: #{user.percentage_correct}"
     end.reverse
+    puts user_percentages
   end 
 
-  def leader_board
+  # def leader_board
+  #   prompt = TTY::Prompt.new(active_color: :cyan)
 
-  end
+  #   input = prompt.select("Please choose from the following options:") do |menu|
+  #     menu.choice "your current ranking"
+  #     menu.choice "top 10 by points"
+  #     menu.choice "top 10 by percentage correct"
+  #     menu.choice "main menu"
+  #   end
+  #   until input == "main menu"
+  #     if input == "your current ranking"
+  #       self.current_ranking
+  #       input = self.leader_board
+  #     elsif input == "top 10 by points"
+  #       User.top_ten_by_points
+  #       input = self.leader_board
+  #     elsif input == "top 10 by percentage correct"
+  #       User.top_ten_by_percentage_correct
+  #       input = self.leader_board
+  #     end 
+  #   end
+  #   cli.menu 
+  # end 
+
+  def leader_board
+      prompt = TTY::Prompt.new(active_color: :cyan)
+  
+      input = prompt.select("Please choose from the following options:") do |menu|
+        menu.choice "your current ranking"
+        menu.choice "top 10 by points"
+        menu.choice "top 10 by percentage correct"
+        menu.choice "main menu"
+      end
+     
+        if input == "your current ranking"
+          self.current_ranking
+          input = self.leader_board
+        elsif input == "top 10 by points"
+          User.top_ten_by_points
+          input = self.leader_board
+        elsif input == "top 10 by percentage correct"
+          User.top_ten_by_percentage_correct
+          input = self.leader_board
+        elsif input == "main menu"
+          "main menu"
+        end 
+      end
+       
+     
 
 end
+

@@ -45,7 +45,10 @@ class User < ActiveRecord::Base
   end
 
   def self.top_ten_by_points
-    User.order(total_points: :desc).limit(10)
+    users = User.order(total_points: :desc).limit(10)
+    users.map do |user|
+      "#{user.username}: #{user.total_points}"
+    end
   end
   
 
@@ -70,9 +73,12 @@ class User < ActiveRecord::Base
   end
 
   def self.top_10_by_percentage_correct 
-    user_percentages = User.all.map do |user|
+    # user_percentages = User.all.sort_by do |user|
+    #   user.percentage_correct.size
+    # end
+    user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.map do |user|
       "#{user.username}: #{user.percentage_correct}"
-    end.s
+    end.reverse
   end 
 
   def leader_board

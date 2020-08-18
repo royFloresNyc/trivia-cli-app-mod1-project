@@ -115,7 +115,8 @@ end
 #AnsweredQuestions
 
 AnsweredQuestion.create(answered_correctly: true, user_id: User.first, question_id: Question.first)
-
+AnsweredQuestion.create(answered_correctly: true)
+AnsweredQuestion.create(answered_correctly: true)
 #Pry.start
 
 

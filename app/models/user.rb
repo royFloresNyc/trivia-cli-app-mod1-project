@@ -32,7 +32,51 @@ class User < ActiveRecord::Base
     user
   end
 
+
   def play
-    
+
   end
+
+  def view_profile
+    puts "username: #{self.username}"
+    puts "total points: #{self.total_points}"
+    puts "level: #{self.level}"
+    puts "chances: #{self.chances}"
+  end
+
+  def self.top_ten_by_points
+    User.order(total_points: :desc).limit(10)
+  end
+  
+
+  def answered_questions
+    AnsweredQuestion.all.filter{ |aq| aq.user_id == self.id}
+  end
+
+  def total_questions_correct
+    if self.answered_questions.count > 0
+       self.answered_questions.filter{|aq| aq.answered_correctly = true}.count
+    else
+      return 0
+    end 
+  end 
+
+  def percentage_correct
+    if self.answered_questions.count > 0
+    (self.total_questions_correct / self.answered_questions.count) * 100
+    else
+      return 0
+    end 
+  end
+
+  def self.top_10_by_percentage_correct 
+    user_percentages = User.all.map do |user|
+      "#{user.username}: #{user.percentage_correct}"
+    end.s
+  end 
+
+  def leader_board
+
+  end
+
 end

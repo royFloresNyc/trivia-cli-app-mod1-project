@@ -4,6 +4,7 @@ class Question < ActiveRecord::Base
   has_many :users, through: :answered_questions
 
   def self.get_question_by(category, difficulty)
+    #Question.where
     Question.all.filter {|question| question.category == category && question.difficulty == difficulty}.sample
   end
 

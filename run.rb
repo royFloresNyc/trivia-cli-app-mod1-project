@@ -3,7 +3,14 @@ require "pry"
 
 
 cli = CLI.new
-cli.welcome
-cli.menu
+player = cli.welcome
+choice = cli.menu
+until choice == "exit" do 
+    if choice == "view profile"
+        player.view_profile
+        choice = cli.menu
+    end
+end 
+cli.exit(player)
 #Pry.start
 

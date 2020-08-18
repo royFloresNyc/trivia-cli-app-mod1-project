@@ -19,7 +19,7 @@ class CLI
   def menu
     prompt = TTY::Prompt.new(active_color: :cyan)
 
-    choice = prompt.select("Please choose from the following options:") do |menu|
+    input = prompt.select("Please choose from the following options:") do |menu|
       menu.choice "PLAY"
       menu.choice "view profile"
       menu.choice "view leader boards"
@@ -27,8 +27,9 @@ class CLI
     end
   end
 
-  if choice == "PLAY"
-    Question.
+
+  def exit(player)
+    p "Thanks for playing #{player.username}, see you next time!"
   end
 
 end

@@ -16,6 +16,8 @@ User.create(username: "savanah", password: "12345", total_points: 0, level: 1, c
 
 
 
+
+
 #Category: General Knowledge ============================================================================
 easy_general_knowledge = RestClient.get("https://opentdb.com/api.php?amount=20&category=9&difficulty=easy")
 parsed_easy_general_knowledge = JSON.parse(easy_general_knowledge)
@@ -109,6 +111,10 @@ parsed_hard_entertainment_television["results"].each do |question|
   question[:points_worth] = 15
   Question.create(question)
 end
+
+#AnsweredQuestions
+
+AnsweredQuestion.create(answered_correctly: true, user_id: User.first, question_id: Question.first)
 
 #Pry.start
 

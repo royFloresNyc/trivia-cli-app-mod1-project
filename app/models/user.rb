@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
   end
 
   def answered_questions
-    AnsweredQuestion.all.filter{ |aq| aq.user_id == self.id}
+    AnsweredQuestion.all.filter{ |aq| aq.user_id == self.id}  
   end
 
   def total_questions_correct
@@ -81,30 +81,6 @@ class User < ActiveRecord::Base
     puts user_percentages
   end 
 
-  # def leader_board
-  #   prompt = TTY::Prompt.new(active_color: :cyan)
-
-  #   input = prompt.select("Please choose from the following options:") do |menu|
-  #     menu.choice "your current ranking"
-  #     menu.choice "top 10 by points"
-  #     menu.choice "top 10 by percentage correct"
-  #     menu.choice "main menu"
-  #   end
-  #   until input == "main menu"
-  #     if input == "your current ranking"
-  #       self.current_ranking
-  #       input = self.leader_board
-  #     elsif input == "top 10 by points"
-  #       User.top_ten_by_points
-  #       input = self.leader_board
-  #     elsif input == "top 10 by percentage correct"
-  #       User.top_ten_by_percentage_correct
-  #       input = self.leader_board
-  #     end 
-  #   end
-  #   cli.menu 
-  # end 
-
   def leader_board
       prompt = TTY::Prompt.new(active_color: :cyan)
   
@@ -127,9 +103,77 @@ class User < ActiveRecord::Base
         elsif input == "main menu"
           "main menu"
         end 
+    end
+
+    def get_player_level
+      if self.level == 1
+        "easy"
+      elsif self.level == 2
+         "medium"
+      else
+          "hard"
       end
+    end 
+
+    def already_answered?(question)
+      found = self.answered_questions.select do |aq|
+        aq.question_id == question.id
+      end
+      if found == []
+        false
+      else
+        true
+      end 
+    end 
        
+    def play
+      prompt = TTY::Prompt.new(active_color: :cyan)
+      chances = self.chances 
+
+      while  chances > 0
+        chosen_category = prompt.select("Please select from the following categories:", Question.all_categories)
+        difficulty_level = self.get_player_level
+
+        current_question = Question.get_question_by(chosen_category, difficulty_level)
+        valid = already_answered?(current_question)
+
+        if valid
+
+        else
+
+      
+
+      else
+        puts "You've run out of chances! Better luck next time."
+        "main menu"
+      end
+    end
      
 
 end
 
+
+
+ # def leader_board
+  #   prompt = TTY::Prompt.new(active_color: :cyan)
+
+  #   input = prompt.select("Please choose from the following options:") do |menu|
+  #     menu.choice "your current ranking"
+  #     menu.choice "top 10 by points"
+  #     menu.choice "top 10 by percentage correct"
+  #     menu.choice "main menu"
+  #   end
+  #   until input == "main menu"
+  #     if input == "your current ranking"
+  #       self.current_ranking
+  #       input = self.leader_board
+  #     elsif input == "top 10 by points"
+  #       User.top_ten_by_points
+  #       input = self.leader_board
+  #     elsif input == "top 10 by percentage correct"
+  #       User.top_ten_by_percentage_correct
+  #       input = self.leader_board
+  #     end 
+  #   end
+  #   cli.menu 
+  # end 

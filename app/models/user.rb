@@ -30,6 +30,8 @@ class User < ActiveRecord::Base
       puts "Username and password don't match"
       User.log_in
     end
+    user.chances = 3
+    user.save
     user
   end
 
@@ -136,6 +138,24 @@ class User < ActiveRecord::Base
         end 
         current_question
     end 
+
+    def level_up
+      level = self.get_player_level
+      answered_correctly = self.answered_questions.select do |qa|
+        qa.answered_correctly == true
+      end.map do |qa|
+        Question.find(qa.question_id)
+      end.select do |question|
+        question.difficulty ==level
+      end
+      if answered_correctly.count > 2
+        self.level += 1
+        self.save
+        puts "You've leveled up! You're now on level #{self.level}!"
+      else
+        puts "You're still on level #{self.level}. Answer #{2 - answered_correctly.count} more questions correctly to level up!"
+      end
+    end
        
     def play
         prompt = TTY::Prompt.new(active_color: :cyan)
@@ -154,7 +174,8 @@ class User < ActiveRecord::Base
                     self.total_points += new_question.points_worth
                     self.save
                     AnsweredQuestion.create(answered_correctly: true, user_id: self.id, question_id: new_question.id)
-                    puts "Correct! Great Job!"
+                    puts "Correct! You've just earned #{new_question.points_worth} points!"
+                    self.level_up
                 else
                     puts "You got it wrong."
                     puts "The correct answer is #{new_question.correct_answer}"
@@ -162,40 +183,14 @@ class User < ActiveRecord::Base
                     self.chances -= 1
                     self.save
                     chances -= 1
+                    puts "You have #{chances} chances left!"
                 end 
             else
                 return "main menu"
             end 
         end 
         puts "You've run out of chances! Better luck next time."
-        "main menu"
+        return "main menu"
     end
-     
 
 end
-
-
-
- # def leader_board
-  #   prompt = TTY::Prompt.new(active_color: :cyan)
-
-  #   input = prompt.select("Please choose from the following options:") do |menu|
-  #     menu.choice "your current ranking"
-  #     menu.choice "top 10 by points"
-  #     menu.choice "top 10 by percentage correct"
-  #     menu.choice "main menu"
-  #   end
-  #   until input == "main menu"
-  #     if input == "your current ranking"
-  #       self.current_ranking
-  #       input = self.leader_board
-  #     elsif input == "top 10 by points"
-  #       User.top_ten_by_points
-  #       input = self.leader_board
-  #     elsif input == "top 10 by percentage correct"
-  #       User.top_ten_by_percentage_correct
-  #       input = self.leader_board
-  #     end 
-  #   end
-  #   cli.menu 
-  # end 

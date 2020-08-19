@@ -6,7 +6,14 @@ cli = CLI.new
 player = cli.welcome
 choice = cli.menu
 until choice == "exit" do 
-    if choice == "view profile"
+    if choice == "PLAY"
+      menu_input = player.play
+      until menu_input == "main menu"
+        player.play
+        menu_input = player.play
+      end
+      choice = cli.menu
+    elsif choice == "view profile"
       player.view_profile
       choice = cli.menu
     elsif choice == "view leader boards"

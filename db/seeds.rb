@@ -3,6 +3,7 @@ require 'json'
 require 'pry'
 require 'pry-byebug'
 require_relative '../config/environment'
+# API used - https://opentdb.com
 
 Question.destroy_all
 User.destroy_all

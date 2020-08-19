@@ -20,9 +20,10 @@ class User < ActiveRecord::Base
 
   def self.log_in
     prompt = TTY::Prompt.new(active_color: :cyan)
-
+    sleep(1)
     puts "Please enter your username"
     username = gets.chomp
+    sleep(1)
     password = prompt.mask("Please enter a password")
     user = User.find_by(username: username, password: password)
     #binding.pry
@@ -30,7 +31,7 @@ class User < ActiveRecord::Base
       puts "Username and password don't match"
       User.log_in
     end
-    user.chances = 3
+    user.chances += 3
     user.save
     user
   end
@@ -157,40 +158,40 @@ class User < ActiveRecord::Base
       end
     end
        
-    def play
-        prompt = TTY::Prompt.new(active_color: :cyan)
-        chances = self.chances 
+    # def play
+    #     prompt = TTY::Prompt.new(active_color: :cyan)
+    #     chances = self.chances 
 
-        while  chances > 0
-            chosen_category = prompt.select("Please select from the following categories:", Question.all_categories.concat(["main menu"]))
-            difficulty_level = self.get_player_level
+    #     while  chances > 0
+    #         chosen_category = prompt.select("Please select from the following categories:", Question.all_categories.concat(["main menu"]))
+    #         difficulty_level = self.get_player_level
 
-            if chosen_category != "main menu"
-                new_question = self.get_a_valid_question(chosen_category, difficulty_level)
+    #         if chosen_category != "main menu"
+    #             new_question = self.get_a_valid_question(chosen_category, difficulty_level)
 
-                answer = new_question.question_and_answer
+    #             answer = new_question.question_and_answer
 
-                if answer == new_question.correct_answer
-                    self.total_points += new_question.points_worth
-                    self.save
-                    AnsweredQuestion.create(answered_correctly: true, user_id: self.id, question_id: new_question.id)
-                    puts "Correct! You've just earned #{new_question.points_worth} points!"
-                    self.level_up
-                else
-                    puts "You got it wrong."
-                    puts "The correct answer is #{new_question.correct_answer}"
-                    AnsweredQuestion.create(answered_correctly: false, user_id: self.id, question_id: new_question.id)
-                    self.chances -= 1
-                    self.save
-                    chances -= 1
-                    puts "You have #{chances} chances left!"
-                end 
-            else
-                return "main menu"
-            end 
-        end 
-        puts "You've run out of chances! Better luck next time."
-        return "main menu"
-    end
+    #             if answer == new_question.correct_answer
+    #                 self.total_points += new_question.points_worth
+    #                 self.save
+    #                 AnsweredQuestion.create(answered_correctly: true, user_id: self.id, question_id: new_question.id)
+    #                 puts "Correct! You've just earned #{new_question.points_worth} points!"
+    #                 self.level_up
+    #             else
+    #                 puts "You got it wrong."
+    #                 puts "The correct answer is #{new_question.correct_answer}"
+    #                 AnsweredQuestion.create(answered_correctly: false, user_id: self.id, question_id: new_question.id)
+    #                 self.chances -= 1
+    #                 self.save
+    #                 chances -= 1
+    #                 puts "You have #{chances} chances left!"
+    #             end 
+    #         else
+    #             return "main menu"
+    #         end 
+    #     end 
+    #     puts "You've run out of chances! Better luck next time."
+    #     return "main menu"
+    # end
 
 end

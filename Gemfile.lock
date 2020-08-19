@@ -72,6 +72,7 @@ GEM
     tilt (2.0.10)
     tty-color (0.5.2)
     tty-cursor (0.7.1)
+    tty-font (0.5.0)
     tty-prompt (0.21.0)
       necromancer (~> 0.5.0)
       pastel (~> 0.7.0)
@@ -104,6 +105,7 @@ DEPENDENCIES
   activerecord
   colorize
   json
+  pastel
   pry
   pry-byebug
   rake
@@ -111,6 +113,7 @@ DEPENDENCIES
   rest-client
   sinatra-activerecord
   sqlite3
+  tty-font
   tty-prompt
   tty-table
 

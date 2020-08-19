@@ -2,6 +2,14 @@ require "tty-prompt"
 require 'pry'
 
 class CLI 
+  
+    def clear
+        system "clear"
+        font = TTY::Font.new(:standard)
+        pastel = Pastel.new
+        puts pastel.cyan(font.write("TRIVIA", letter_spacing: 1))
+    end
+
     def welcome
         prompt = TTY::Prompt.new(active_color: :cyan)
 
@@ -52,7 +60,8 @@ class CLI
                     chances -= 1
                     puts "\nYou have #{chances} chances left!"
                 end 
-                
+                sleep(5)
+                self.clear
             else
                 return "main menu"
             end 
@@ -63,6 +72,7 @@ class CLI
 
 
     def exit(player)
+        self.clear
         puts "\nThanks for playing #{player.username}, see you next time!"
         
     end

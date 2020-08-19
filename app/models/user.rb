@@ -40,12 +40,18 @@ class User < ActiveRecord::Base
         end 
     end
 
+    # def view_profile
+    #     puts "\nusername: #{self.username}"
+    #     puts "total points: #{self.total_points}"
+    #     puts "level: #{self.level}"
+    #     puts "chances: #{self.chances}"
+    # end
+
     def view_profile
-        puts "\nusername: #{self.username}"
-        puts "total points: #{self.total_points}"
-        puts "level: #{self.level}"
-        puts "chances: #{self.chances}"
+        table = TTY::Table.new [['username', "#{self.username}"],["total points","#{self.total_points}"],["level","#{self.level}"],["chances", "#{self.chances}"]]
+        puts table.render(:ascii, padding: [0,1,0,1])
     end
+
 
     def self.top_ten_by_points
         users = User.order(total_points: :desc).limit(10)
@@ -54,8 +60,17 @@ class User < ActiveRecord::Base
         users.map do |user|
             table << ["#{user.username}", "#{user.total_points}"]
         end
-        table.render(:ascii)
+        table.render(:ascii, padding: [0,1,0,1])
     end
+    # def self.top_ten_by_points
+    #     users = User.order(total_points: :desc).limit(10)
+    #     table = TTY::Table.new [{value: "username", alignment: :center},{value: 'total points', alignment: :center}], [["","" ]]
+
+    #     users.map do |user|
+    #         table << ["#{user.username}", "#{user.total_points}"]
+    #     end
+    #     table.render(:ascii, padding: [0,1,0,1])
+    # end
     
 
     def current_ranking
@@ -70,7 +85,7 @@ class User < ActiveRecord::Base
 
     def total_questions_correct
         if self.answered_questions.count > 0
-            self.answered_questions.filter{|aq| aq.answered_correctly = true}.count
+            self.answered_questions.filter{|aq| aq.answered_correctly == true}.count
         else
             return 0
         end 
@@ -78,7 +93,7 @@ class User < ActiveRecord::Base
 
     def percentage_correct
         if self.answered_questions.count > 0
-            (self.total_questions_correct / self.answered_questions.count) * 100
+            ((self.total_questions_correct.to_f / self.answered_questions.count.to_f) * 100.0).round
         else
             return 0
         end 
@@ -89,7 +104,7 @@ class User < ActiveRecord::Base
         user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.reverse.map do |user|
              table << ["#{user.username}","#{user.percentage_correct}"]
         end
-        table.render(:ascii)
+        table.render(:ascii, padding: [0,1,0,1])
     end 
 
     def leader_board
@@ -102,9 +117,11 @@ class User < ActiveRecord::Base
         end
       
         if input == "your current ranking"
+            #system 'clear'
             self.current_ranking
             input = self.leader_board
         elsif input == "top 10 by points"
+            #system "clear"
             puts User.top_ten_by_points
             input = self.leader_board
         elsif input == "top 10 by percentage correct"

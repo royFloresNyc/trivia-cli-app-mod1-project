@@ -1,7 +1,14 @@
 require_relative './config/environment'
 require "pry"
+system "clear"
 
 cli = CLI.new
+
+cli.clear
+# font = TTY::Font.new(:standard)
+# pastel = Pastel.new
+# puts pastel.cyan(font.write("TRIVIA", letter_spacing: 1))
+
 player = cli.welcome
 
 until player.class == User
@@ -11,7 +18,8 @@ end
 sleep(1)
 choice = cli.menu
 
-until choice == "exit" do 
+until choice == "exit" do
+    cli.clear 
     if choice == "PLAY"
         menu_input = cli.play(player)
         until menu_input == "main menu"

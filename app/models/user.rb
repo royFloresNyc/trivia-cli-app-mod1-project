@@ -49,9 +49,12 @@ class User < ActiveRecord::Base
 
     def self.top_ten_by_points
         users = User.order(total_points: :desc).limit(10)
+        table = TTY::Table.new ['username','total points'], [["","" ]]
+
         users.map do |user|
-            puts "#{user.username}: #{user.total_points}"
+            table << ["#{user.username}", "#{user.total_points}"]
         end
+        table.render(:ascii)
     end
     
 
@@ -82,16 +85,15 @@ class User < ActiveRecord::Base
     end
 
     def self.top_ten_by_percentage_correct 
-        user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.map do |user|
-            "#{user.username}: #{user.percentage_correct}"
-        end.reverse
-        
-        puts user_percentages
+        table = TTY::Table.new ['username','percent correct'], [["","" ]]
+        user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.reverse.map do |user|
+             table << ["#{user.username}","#{user.percentage_correct}"]
+        end
+        table.render(:ascii)
     end 
 
     def leader_board
         prompt = TTY::Prompt.new(active_color: :cyan)
-    
         input = prompt.select("\nPlease choose from the following options:") do |menu|
             menu.choice "your current ranking"
             menu.choice "top 10 by points"
@@ -103,10 +105,10 @@ class User < ActiveRecord::Base
             self.current_ranking
             input = self.leader_board
         elsif input == "top 10 by points"
-            User.top_ten_by_points
+            puts User.top_ten_by_points
             input = self.leader_board
         elsif input == "top 10 by percentage correct"
-            User.top_ten_by_percentage_correct
+            puts User.top_ten_by_percentage_correct
             input = self.leader_board
         elsif input == "main menu"
             "main menu"

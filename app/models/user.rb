@@ -125,28 +125,45 @@ class User < ActiveRecord::Base
         true
       end 
     end 
+
+    def get_a_valid_question(category, difficulty)
+        current_question = Question.get_question_by(category, difficulty)
+        valid = self.already_answered?(current_question)
+
+        if !valid
+            current_question = Question.get_question_by(category, difficulty)
+        end 
+        current_question
+    end 
        
     def play
-      prompt = TTY::Prompt.new(active_color: :cyan)
-      chances = self.chances 
+        prompt = TTY::Prompt.new(active_color: :cyan)
+        chances = self.chances 
 
-      while  chances > 0
-        chosen_category = prompt.select("Please select from the following categories:", Question.all_categories)
-        difficulty_level = self.get_player_level
+        while  chances > 0
+            chosen_category = prompt.select("Please select from the following categories:", Question.all_categories)
+            difficulty_level = self.get_player_level
 
-        current_question = Question.get_question_by(chosen_category, difficulty_level)
-        valid = already_answered?(current_question)
+            new_question = self.get_a_valid_question(chosen_category, difficulty_level)
 
-        if valid
+            answer = new_question.question_and_answer
 
-        else
-
-      
-
-      else
+            if answer == new_question.correct_answer
+                self.total_points += new_question.points_worth
+                self.save
+                AnsweredQuestion.create(answered_correctly: true, user_id: self.id, question_id: new_question.id)
+                puts "Correct! Great Job!"
+            else
+                puts "You got it wrong."
+                puts "The correct answer is #{new_question.correct_answer}"
+                AnsweredQuestion.create(answered_correctly: false, user_id: self.id, question_id: new_question.id)
+                self.chances -= 1
+                self.save
+                chances -= 1
+            end 
+        end 
         puts "You've run out of chances! Better luck next time."
         "main menu"
-      end
     end
      
 

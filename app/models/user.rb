@@ -74,9 +74,7 @@ class User < ActiveRecord::Base
     
 
     def current_ranking
-        users = User.order(total_points: :desc)
-        index = users.index(self)
-        puts "\n#{self.username}, you're currently at position #{index + 1}!"
+        User.order(total_points: :desc).index(self) + 1
     end
 
     def answered_questions
@@ -107,32 +105,30 @@ class User < ActiveRecord::Base
         table.render(:ascii, padding: [0,1,0,1])
     end 
 
-    def leader_board
-        prompt = TTY::Prompt.new(active_color: :cyan)
-        input = prompt.select("\nPlease choose from the following options:") do |menu|
-            menu.choice "your current ranking"
-            menu.choice "top 10 by points"
-            menu.choice "top 10 by percentage correct"
-            menu.choice "main menu"
-        end
+    # def leader_board
+    #     prompt = TTY::Prompt.new(active_color: :cyan)
+    #     input = prompt.select("\nPlease choose from the following options:") do |menu|
+    #         menu.choice "your current ranking"
+    #         menu.choice "top 10 by points"
+    #         menu.choice "top 10 by percentage correct"
+    #         menu.choice "main menu"
+    #     end
       
-        if input == "your current ranking"
-            #system 'clear'
-            self.current_ranking
-            input = self.leader_board
-        elsif input == "top 10 by points"
-            #system "clear"
-            puts User.top_ten_by_points
-            input = self.leader_board
-        elsif input == "top 10 by percentage correct"
-            puts User.top_ten_by_percentage_correct
-            input = self.leader_board
-        elsif input == "main menu"
-            "main menu"
-        end 
-    end
+    #     if input == "your current ranking"
+    #         puts "\n#{self.username}, you're currently at position #{self.current_ranking}!"
+    #         input = self.leader_board
+    #     elsif input == "top 10 by points"
+    #         puts User.top_ten_by_points
+    #         input = self.leader_board
+    #     elsif input == "top 10 by percentage correct"
+    #         puts User.top_ten_by_percentage_correct
+    #         input = self.leader_board
+    #     elsif input == "main menu"
+    #         "main menu"
+    #     end 
+    # end
 
-    def get_player_level
+    def get_difficulty_level
         if self.level == 1
             "easy"
         elsif self.level == 2
@@ -167,7 +163,7 @@ class User < ActiveRecord::Base
     end 
 
     def level_up
-        level = self.get_player_level
+        level = self.get_difficulty_level
 
         answered_correctly = self.answered_questions.select do |qa|
             qa.answered_correctly == true
@@ -193,7 +189,7 @@ class User < ActiveRecord::Base
 
     #     while  chances > 0
     #         chosen_category = prompt.select("Please select from the following categories:", Question.all_categories.concat(["main menu"]))
-    #         difficulty_level = self.get_player_level
+    #         difficulty_level = self.get_difficulty_level
 
     #         if chosen_category != "main menu"
     #             new_question = self.get_a_valid_question(chosen_category, difficulty_level)

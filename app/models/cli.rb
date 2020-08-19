@@ -31,6 +31,29 @@ class CLI
         end
     end
 
+    def leader_board(user)
+        prompt = TTY::Prompt.new(active_color: :cyan)
+        input = prompt.select("\nPlease choose from the following options:") do |menu|
+            menu.choice "your current ranking"
+            menu.choice "top 10 by points"
+            menu.choice "top 10 by percentage correct"
+            menu.choice "main menu"
+        end
+      
+        if input == "your current ranking"
+            puts "\n#{user.username}, you're currently at position #{user.current_ranking}!"
+            input = self.leader_board(user)
+        elsif input == "top 10 by points"
+            puts User.top_ten_by_points
+            input = self.leader_board(user)
+        elsif input == "top 10 by percentage correct"
+            puts User.top_ten_by_percentage_correct
+            input = self.leader_board(user)
+        elsif input == "main menu"
+            "main menu"
+        end 
+    end
+
     def play(user)
         prompt = TTY::Prompt.new(active_color: :cyan)
 
@@ -38,7 +61,7 @@ class CLI
 
         while  chances > 0
             chosen_category = prompt.select("\nPlease select from the following categories:", Question.all_categories.concat(["main menu"]))
-            difficulty_level = user.get_player_level
+            difficulty_level = user.get_difficulty_level
 
             if chosen_category != "main menu"
                 new_question = user.get_a_valid_question(chosen_category, difficulty_level)

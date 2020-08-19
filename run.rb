@@ -31,10 +31,10 @@ until choice == "exit" do
         player.view_profile
         choice = cli.menu
     elsif choice == "view leader boards"
-        menu_input = player.leader_board
+        menu_input = cli.leader_board(player)
         until menu_input == "main menu"
-            player.leader_board
-            menu_input = player.leader_board
+            cli.leader_board(player)
+            menu_input = cli.leader_board(player)
         end
         choice = cli.menu
     end

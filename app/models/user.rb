@@ -128,10 +128,11 @@ class User < ActiveRecord::Base
 
     def get_a_valid_question(category, difficulty)
         current_question = Question.get_question_by(category, difficulty)
-        valid = self.already_answered?(current_question)
-
-        if !valid
+        already_answered = self.already_answered?(current_question)
+        
+        while already_answered
             current_question = Question.get_question_by(category, difficulty)
+            already_answered = self.already_answered?(current_question)
         end 
         current_question
     end 
@@ -141,25 +142,29 @@ class User < ActiveRecord::Base
         chances = self.chances 
 
         while  chances > 0
-            chosen_category = prompt.select("Please select from the following categories:", Question.all_categories)
+            chosen_category = prompt.select("Please select from the following categories:", Question.all_categories.concat(["main menu"]))
             difficulty_level = self.get_player_level
 
-            new_question = self.get_a_valid_question(chosen_category, difficulty_level)
+            if chosen_category != "main menu"
+                new_question = self.get_a_valid_question(chosen_category, difficulty_level)
 
-            answer = new_question.question_and_answer
+                answer = new_question.question_and_answer
 
-            if answer == new_question.correct_answer
-                self.total_points += new_question.points_worth
-                self.save
-                AnsweredQuestion.create(answered_correctly: true, user_id: self.id, question_id: new_question.id)
-                puts "Correct! Great Job!"
+                if answer == new_question.correct_answer
+                    self.total_points += new_question.points_worth
+                    self.save
+                    AnsweredQuestion.create(answered_correctly: true, user_id: self.id, question_id: new_question.id)
+                    puts "Correct! Great Job!"
+                else
+                    puts "You got it wrong."
+                    puts "The correct answer is #{new_question.correct_answer}"
+                    AnsweredQuestion.create(answered_correctly: false, user_id: self.id, question_id: new_question.id)
+                    self.chances -= 1
+                    self.save
+                    chances -= 1
+                end 
             else
-                puts "You got it wrong."
-                puts "The correct answer is #{new_question.correct_answer}"
-                AnsweredQuestion.create(answered_correctly: false, user_id: self.id, question_id: new_question.id)
-                self.chances -= 1
-                self.save
-                chances -= 1
+                return "main menu"
             end 
         end 
         puts "You've run out of chances! Better luck next time."

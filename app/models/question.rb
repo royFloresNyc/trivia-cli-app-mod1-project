@@ -27,7 +27,7 @@ class Question < ActiveRecord::Base
         answers = "#{self.correct_answer}, #{self.incorrect_answers}"
         answers = answers.split(", ").shuffle
 
-        choice = prompt.select(self.question, answers)
+        choice = prompt.select("\n#{self.question}", answers)
     end
 
     def self.all_categories

@@ -5,22 +5,17 @@ class CLI
     def welcome
         prompt = TTY::Prompt.new(active_color: :cyan)
 
-        choice = prompt.select("Welcome to Trivia! Please select one of the following:") do |menu|
+        choice = prompt.select("\nWelcome to Trivia! Please select one of the following:") do |menu|
             menu.choice "log-in"
             menu.choice "sign-up"
         end
-        choice == "signup" ? player = User.sign_up : player = User.log_in
-    # if choice == "sign-up"
-    #   player = User.sign_up
-    # else 
-    #   player = User.log_in
-    # end
+        choice == "sign-up" ? player = User.sign_up : player = User.log_in
     end
 
     def menu
         prompt = TTY::Prompt.new(active_color: :cyan)
 
-        input = prompt.select("Please choose from the following options:") do |menu|
+        input = prompt.select("\nPlease choose from the following options:") do |menu|
             menu.choice "PLAY"
             menu.choice "view profile"
             menu.choice "view leader boards"
@@ -34,7 +29,7 @@ class CLI
         chances = user.chances 
 
         while  chances > 0
-            chosen_category = prompt.select("Please select from the following categories:", Question.all_categories.concat(["main menu"]))
+            chosen_category = prompt.select("\nPlease select from the following categories:", Question.all_categories.concat(["main menu"]))
             difficulty_level = user.get_player_level
 
             if chosen_category != "main menu"
@@ -46,29 +41,30 @@ class CLI
                     user.save
                     AnsweredQuestion.create(answered_correctly: true, user_id: user.id, question_id: new_question.id)
                     #self.correct_image
-                    puts "Correct! You've just earned #{new_question.points_worth} points!"
+                    puts "\nCorrect! You've just earned #{new_question.points_worth} points!"
                     user.level_up
                 else
-                    puts "You got it wrong."
-                    puts "The correct answer is #{new_question.correct_answer}"
+                    puts "\nYou got it wrong."
+                    puts "\nThe correct answer is #{new_question.correct_answer}"
                     AnsweredQuestion.create(answered_correctly: false, user_id: user.id, question_id: new_question.id)
                     user.chances -= 1
                     user.save
                     chances -= 1
-                    puts "You have #{chances} chances left!"
+                    puts "\nYou have #{chances} chances left!"
                 end 
                 
             else
                 return "main menu"
             end 
         end 
-        puts "You've run out of chances! Better luck next time."
+        puts "\nYou've run out of chances! Better luck next time."
         return "main menu"
     end
 
 
     def exit(player)
-        p "Thanks for playing #{player.username}, see you next time!"
+        puts "\nThanks for playing #{player.username}, see you next time!"
+        
     end
 
 

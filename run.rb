@@ -3,6 +3,11 @@ require "pry"
 
 cli = CLI.new
 player = cli.welcome
+
+until player.class == User
+    player = cli.welcome
+end 
+
 sleep(1)
 choice = cli.menu
 

@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 
     def self.sign_up
         prompt = TTY::Prompt.new(active_color: :cyan)
-        puts "Please select a username"
+        puts "\nPlease select a username"
         username = gets.chomp
         user = User.find_by(username: username)
         
@@ -23,24 +23,25 @@ class User < ActiveRecord::Base
     def self.log_in
         prompt = TTY::Prompt.new(active_color: :cyan)
         sleep(1)
-        puts "Please enter your username"
+        puts "\nPlease enter your username"
         username = gets.chomp
         sleep(1)
         password = prompt.mask("Please enter a password")
         user = User.find_by(username: username, password: password)
 
         if !user
-            puts "Username and password don't match"
-            User.log_in
-        end
-
-        user.chances += 3
-        user.save
-        user
+            puts "\nUsername and password don't match"
+            return nil
+        else
+            user.chances = 3
+            user.save
+            puts "\nWelcome back #{user.username}!"
+            user
+        end 
     end
 
     def view_profile
-        puts "username: #{self.username}"
+        puts "\nusername: #{self.username}"
         puts "total points: #{self.total_points}"
         puts "level: #{self.level}"
         puts "chances: #{self.chances}"
@@ -57,7 +58,7 @@ class User < ActiveRecord::Base
     def current_ranking
         users = User.order(total_points: :desc)
         index = users.index(self)
-        puts "#{self.username}, you're currently at position #{index + 1}"
+        puts "\n#{self.username}, you're currently at position #{index + 1}!"
     end
 
     def answered_questions
@@ -91,7 +92,7 @@ class User < ActiveRecord::Base
     def leader_board
         prompt = TTY::Prompt.new(active_color: :cyan)
     
-        input = prompt.select("Please choose from the following options:") do |menu|
+        input = prompt.select("\nPlease choose from the following options:") do |menu|
             menu.choice "your current ranking"
             menu.choice "top 10 by points"
             menu.choice "top 10 by percentage correct"
@@ -148,6 +149,7 @@ class User < ActiveRecord::Base
 
     def level_up
         level = self.get_player_level
+
         answered_correctly = self.answered_questions.select do |qa|
             qa.answered_correctly == true
         end.map do |qa|
@@ -156,13 +158,14 @@ class User < ActiveRecord::Base
             question.difficulty ==level
         end
         
-        if answered_correctly.count > 2
+        if answered_correctly.count >= 10
             self.level += 1
             self.save
-            puts "You've leveled up! You're now on level #{self.level}!"
+            puts "\nYou've leveled up! You're now on level #{self.level}!"
         else
-            puts "You're still on level #{self.level}. Answer #{2 - answered_correctly.count} more questions correctly to level up!"
+            puts "\nYou're still on level #{self.level}. Answer #{10 - answered_correctly.count} more questions correctly to level up!"
         end
+
     end
        
     # def play

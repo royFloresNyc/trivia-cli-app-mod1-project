@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
     # end
 
     def view_profile
-        table = TTY::Table.new [['username', "#{self.username}"],["total points","#{self.total_points}"],["level","#{self.level}"],["chances", "#{self.chances}"]]
+        table = TTY::Table.new [['username', "#{self.username}"],["total points","#{self.total_points}"],["level","#{self.level}"],["chances", "#{self.chances}"], ["current ranking", "#{self.current_ranking}"]]
         puts table.render(:ascii, padding: [0,1,0,1])
     end
 

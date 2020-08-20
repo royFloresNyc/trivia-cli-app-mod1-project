@@ -41,6 +41,8 @@ class CLI
         end
       
         if input == "your current ranking"
+            #table = TTY::Table.new ["\n#{user.username}, you're currently at position #{user.current_ranking}!"]
+            #puts table.render(:ascii)
             puts "\n#{user.username}, you're currently at position #{user.current_ranking}!"
             input = self.leader_board(user)
         elsif input == "top 10 by points"

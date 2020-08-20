@@ -40,13 +40,6 @@ class User < ActiveRecord::Base
         end 
     end
 
-    # def view_profile
-    #     puts "\nusername: #{self.username}"
-    #     puts "total points: #{self.total_points}"
-    #     puts "level: #{self.level}"
-    #     puts "chances: #{self.chances}"
-    # end
-
     def view_profile
         table = TTY::Table.new [['username', "#{self.username}"],["total points","#{self.total_points}"],["level","#{self.level}"],["chances", "#{self.chances}"], ["current ranking", "#{self.current_ranking}"]]
         puts table.render(:ascii, padding: [0,1,0,1])
@@ -62,16 +55,6 @@ class User < ActiveRecord::Base
         end
         table.render(:ascii, padding: [0,1,0,1])
     end
-    # def self.top_ten_by_points
-    #     users = User.order(total_points: :desc).limit(10)
-    #     table = TTY::Table.new [{value: "username", alignment: :center},{value: 'total points', alignment: :center}], [["","" ]]
-
-    #     users.map do |user|
-    #         table << ["#{user.username}", "#{user.total_points}"]
-    #     end
-    #     table.render(:ascii, padding: [0,1,0,1])
-    # end
-    
 
     def current_ranking
         User.order(total_points: :desc).index(self) + 1
@@ -104,29 +87,6 @@ class User < ActiveRecord::Base
         end
         table.render(:ascii, padding: [0,1,0,1])
     end 
-
-    # def leader_board
-    #     prompt = TTY::Prompt.new(active_color: :cyan)
-    #     input = prompt.select("\nPlease choose from the following options:") do |menu|
-    #         menu.choice "your current ranking"
-    #         menu.choice "top 10 by points"
-    #         menu.choice "top 10 by percentage correct"
-    #         menu.choice "main menu"
-    #     end
-      
-    #     if input == "your current ranking"
-    #         puts "\n#{self.username}, you're currently at position #{self.current_ranking}!"
-    #         input = self.leader_board
-    #     elsif input == "top 10 by points"
-    #         puts User.top_ten_by_points
-    #         input = self.leader_board
-    #     elsif input == "top 10 by percentage correct"
-    #         puts User.top_ten_by_percentage_correct
-    #         input = self.leader_board
-    #     elsif input == "main menu"
-    #         "main menu"
-    #     end 
-    # end
 
     def get_difficulty_level
         if self.level == 1
@@ -180,43 +140,6 @@ class User < ActiveRecord::Base
         else
             puts "\nYou're still on level #{self.level}. Answer #{10 - answered_correctly.count} more questions correctly to level up!"
         end
-
     end
-       
-    # def play
-    #     prompt = TTY::Prompt.new(active_color: :cyan)
-    #     chances = self.chances 
-
-    #     while  chances > 0
-    #         chosen_category = prompt.select("Please select from the following categories:", Question.all_categories.concat(["main menu"]))
-    #         difficulty_level = self.get_difficulty_level
-
-    #         if chosen_category != "main menu"
-    #             new_question = self.get_a_valid_question(chosen_category, difficulty_level)
-
-    #             answer = new_question.question_and_answer
-
-    #             if answer == new_question.correct_answer
-    #                 self.total_points += new_question.points_worth
-    #                 self.save
-    #                 AnsweredQuestion.create(answered_correctly: true, user_id: self.id, question_id: new_question.id)
-    #                 puts "Correct! You've just earned #{new_question.points_worth} points!"
-    #                 self.level_up
-    #             else
-    #                 puts "You got it wrong."
-    #                 puts "The correct answer is #{new_question.correct_answer}"
-    #                 AnsweredQuestion.create(answered_correctly: false, user_id: self.id, question_id: new_question.id)
-    #                 self.chances -= 1
-    #                 self.save
-    #                 chances -= 1
-    #                 puts "You have #{chances} chances left!"
-    #             end 
-    #         else
-    #             return "main menu"
-    #         end 
-    #     end 
-    #     puts "You've run out of chances! Better luck next time."
-    #     return "main menu"
-    # end
 
 end

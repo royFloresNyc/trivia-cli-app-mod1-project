@@ -16,3 +16,4 @@ gem 'colorize'
 gem "tty-table"
 gem 'tty-font'
 gem 'pastel'
+gem 'tty-box'

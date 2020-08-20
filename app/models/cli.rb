@@ -41,9 +41,8 @@ class CLI
         end
       
         if input == "your current ranking"
-            #table = TTY::Table.new ["\n#{user.username}, you're currently at position #{user.current_ranking}!"]
-            #puts table.render(:ascii)
-            puts "\n#{user.username}, you're currently at position #{user.current_ranking}!"
+            box =  TTY::Box.frame "#{user.username}, you're currently at position #{user.current_ranking}!", padding: 1
+            puts "\n#{box}"
             input = self.leader_board(user)
         elsif input == "top 10 by points"
             puts User.top_ten_by_points
@@ -101,40 +100,6 @@ class CLI
         puts "\nThanks for playing #{player.username}, see you next time!"
         
     end
-
-
-#   def correct_image
-#     puts "                                     
-                                         
-                                         
-#                     # .                  
-#                 ##(*#/#* ..              
-#              #(#### /#*###/((#(/         
-#           ######//# (########(*#//.(,    
-#       .##################/####/ #(#/#.   
-#     #########################/#,#,       
-#  ###########################.*           
-# #######################/#*                
-# ######################/                     
-# ###                   #####################                         
-# ,#######                ,##################                             
-# .##########################################                                 
-# ##############           (##############                                    
-# #############/        #############(                                      
-# ##############     .############                                         
-# ##* ###########   #############                                          
-# ##*   ########## ###########*##                                          
-# ##*     ##################  *##                                          
-# ##*       ##############    *##                                          
-# ##*         ##########      *##                                          
-# ##*           ######        *##                                          
-# ##*             ###         /##                                          
-# /#############################/                                          
-# .#######################.                                             
-                                         
-#     ".colorize(:light_green)                                     
-
-# end
 
 end
 

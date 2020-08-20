@@ -1,8 +1,5 @@
-**trivia-mod1-project**
+# Welcome to TRIVIA!
 ---
-
-# Welcome to trivia!
-
 
 A game to test your knowledge about random facts.
 
@@ -11,6 +8,7 @@ A game to test your knowledge about random facts.
 - clone down
 - run bundle install
 - run `ruby run.rb`
+- play!
 
 **Functionalities**
 

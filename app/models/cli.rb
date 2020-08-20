@@ -13,8 +13,8 @@ class CLI
         prompt = TTY::Prompt.new(active_color: :cyan)
 
         choice = prompt.select("\nWelcome to Trivia! Please select one of the following:") do |menu|
-            menu.choice "log-in"
-            menu.choice "sign-up"
+            menu.choice "Log-in"
+            menu.choice "Sign-up"
         end
         choice == "sign-up" ? player = User.sign_up : player = User.log_in
     end
@@ -24,9 +24,9 @@ class CLI
 
         input = prompt.select("\nPlease choose from the following options:") do |menu|
             menu.choice "PLAY"
-            menu.choice "profile settings"
-            menu.choice "view leader boards"
-            menu.choice "exit"
+            menu.choice "Profile Settings"
+            menu.choice "View Leader Boards"
+            menu.choice "Exit"
         end
     end
 
@@ -36,10 +36,10 @@ class CLI
         chances = user.chances 
 
         while  chances > 0
-            chosen_category = prompt.select("\nPlease select from the following categories:", Question.all_categories.concat(["main menu"]))
+            chosen_category = prompt.select("\nPlease select from the following categories:", Question.all_categories.concat(["Main Menu"]))
             difficulty_level = user.get_difficulty_level
 
-            if chosen_category != "main menu"
+            if chosen_category != "Main Menu"
                 new_question = user.get_a_valid_question(chosen_category, difficulty_level)
                 answer = new_question.question_and_answer
 
@@ -61,11 +61,11 @@ class CLI
                 sleep(5)
                 self.clear
             else
-                return "main menu"
+                return "Main Menu"
             end 
         end 
         puts "\nYou've run out of chances! Better luck next time."
-        return "main menu"
+        return "Main Menu"
     end
 
     def view_profile(user)
@@ -76,17 +76,17 @@ class CLI
     def profile(user)
         prompt = TTY::Prompt.new(active_color: :cyan)
         input = prompt.select("\nPlease choose from the following options:") do |menu|
-            menu.choice "view profile"
-            menu.choice "change username"
-            menu.choice "change password"
-            menu.choice 'delete profile'
-            menu.choice "main menu"
+            menu.choice "View Profile"
+            menu.choice "Change Username"
+            menu.choice "Change Password"
+            menu.choice 'Delete Profile'
+            menu.choice "Main Menu"
         end
-        until input == "main menu"
-            if input == "view profile"
+        until input == "Main Menu"
+            if input == "View Profile"
                 self.view_profile(user)
                 input = self.profile(user)
-            elsif input == "change username"
+            elsif input == "Change Username"
                 puts "Please enter a new username:"
                 new_username = gets.chomp
                 already_exist = User.find_by(username: new_username)
@@ -97,11 +97,11 @@ class CLI
                     user.update_username(new_username)
                     input = self.profile(user)
                 end 
-            elsif input == "change password"
+            elsif input == "Change Password"
                 new_password = prompt.mask("Please enter a new password:")
                 user.update_password(new_password)
                 input = self.profile(user)
-            elsif input == "delete profile"
+            elsif input == "Delete Profile"
                 user.destroy
                 puts "We're sad to see you go! We hope you had fun playing Trivia."
                 exit
@@ -113,24 +113,24 @@ class CLI
     def leader_board(user)
         prompt = TTY::Prompt.new(active_color: :cyan)
         input = prompt.select("\nPlease choose from the following options:") do |menu|
-            menu.choice "your current ranking"
-            menu.choice "top 10 by points"
-            menu.choice "top 10 by percentage correct"
-            menu.choice "main menu"
+            menu.choice "Your Current Ranking"
+            menu.choice "Top 10 by Points"
+            menu.choice "Top 10 by Percentage Correct"
+            menu.choice "Main Menu"
         end
       
-        if input == "your current ranking"
+        if input == "Your Current Ranking"
             box =  TTY::Box.frame "#{user.username}, you're currently at position #{user.current_ranking}!", padding: 1
             puts "\n#{box}"
             input = self.leader_board(user)
-        elsif input == "top 10 by points"
+        elsif input == "Top 10 by Points"
             puts User.top_ten_by_points
             input = self.leader_board(user)
-        elsif input == "top 10 by percentage correct"
+        elsif input == "Top 10 by Percentage Correct"
             puts User.top_ten_by_percentage_correct
             input = self.leader_board(user)
-        elsif input == "main menu"
-            "main menu"
+        elsif input == "Main Menu"
+            "Main Menu"
         end 
     end   
 

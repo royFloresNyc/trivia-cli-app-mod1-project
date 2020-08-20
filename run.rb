@@ -18,27 +18,27 @@ end
 sleep(1)
 choice = cli.menu
 
-until choice == "exit" do
+until choice == "Exit" do
     cli.clear 
     if choice == "PLAY"
         menu_input = cli.play(player)
-        until menu_input == "main menu"
+        until menu_input == "Main Menu"
             cli.play(player)
             menu_input = cli.play
         end
         choice = cli.menu
-    elsif choice == "profile settings"
+    elsif choice == "Profile Settings"
         # cli.profile(player)
         # choice = cli.menu
         menu_input = cli.profile(player)
-        until menu_input == "main menu"
+        until menu_input == "Main Menu"
             cli.profile(player)
             menu_input = cli.profile(player)
         end
         choice = cli.menu
-    elsif choice == "view leader boards"
+    elsif choice == "View Leader Boards"
         menu_input = cli.leader_board(player)
-        until menu_input == "main menu"
+        until menu_input == "Main Menu"
             cli.leader_board(player)
             menu_input = cli.leader_board(player)
         end

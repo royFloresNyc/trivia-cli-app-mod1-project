@@ -1,8 +1,8 @@
-trivia-mod1-project
-====================
+**trivia-mod1-project**
+---
 
 # Welcome to trivia!
----
+
 
 A game to test your knowledge about random facts.
 

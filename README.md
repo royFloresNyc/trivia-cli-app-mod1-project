@@ -1,8 +1,15 @@
-# trivia-mod1-project
+## trivia-mod1-project
 
-Welcome to trivia!
+# Welcome to trivia!
 
 A game to test your knowledge about random facts.
+
+**Installation Instructions:**
+
+- clone down
+- run bundle install
+
+**Functionalities**
 
 - User can either log in or sign up for an account. 
 - User accounts track position, total points, and user level
@@ -25,4 +32,3 @@ A game to test your knowledge about random facts.
     - change username
     - change password
     - delete profile
-    

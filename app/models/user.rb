@@ -40,12 +40,6 @@ class User < ActiveRecord::Base
         end 
     end
 
-    # def view_profile
-    #     table = TTY::Table.new [['username', "#{self.username}"],["total points","#{self.total_points}"],["level","#{self.level}"],["chances", "#{self.chances}"], ["current ranking", "#{self.current_ranking}"]]
-    #     puts table.render(:ascii, padding: [0,1,0,1])
-    # end
-
-
     def self.top_ten_by_points
         users = User.order(total_points: :desc).limit(10)
         table = TTY::Table.new ['position','username','total points'], [["","",""]]
@@ -56,6 +50,16 @@ class User < ActiveRecord::Base
         end
         table.render(:ascii, padding: [0,1,0,1])
     end
+    
+    def self.top_ten_by_percentage_correct 
+        table = TTY::Table.new ['position','username','percent correct'], [["","","" ]]
+        index = 1
+        user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.reverse.take(10).map do |user|
+             table << ["#{index}","#{user.username}","#{user.percentage_correct}"]
+             index += 1
+        end
+        table.render(:ascii, padding: [0,1,0,1])
+    end 
 
     def current_ranking
         User.order(total_points: :desc).index(self) + 1
@@ -80,16 +84,6 @@ class User < ActiveRecord::Base
             return 0
         end 
     end
-
-    def self.top_ten_by_percentage_correct 
-        table = TTY::Table.new ['position','username','percent correct'], [["","","" ]]
-        index = 1
-        user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.reverse.take(10).map do |user|
-             table << ["#{index}","#{user.username}","#{user.percentage_correct}"]
-             index += 1
-        end
-        table.render(:ascii, padding: [0,1,0,1])
-    end 
 
     def get_difficulty_level
         if self.level == 1
@@ -137,7 +131,7 @@ class User < ActiveRecord::Base
         end
         
         if answered_correctly.count >= 10
-            self.level += 1
+            self.level += e1
             self.save
             puts "\nYou've leveled up! You're now on level #{self.level}!"
         else
@@ -145,5 +139,18 @@ class User < ActiveRecord::Base
         end
     end
 
+    def update_username(new_username)
+        self.username = new_username
+        self.save
+        self
+    
+    end
+
+    def update_password(new_password)
+        self.password = new_password
+        self.save
+        self
+    end
+
 end
-#Pry.start
+

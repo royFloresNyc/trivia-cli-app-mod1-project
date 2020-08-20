@@ -27,8 +27,14 @@ until choice == "exit" do
             menu_input = cli.play
         end
         choice = cli.menu
-    elsif choice == "view profile"
-        cli.view_profile(player)
+    elsif choice == "profile settings"
+        # cli.profile(player)
+        # choice = cli.menu
+        menu_input = cli.profile(player)
+        until menu_input == "main menu"
+            cli.profile(player)
+            menu_input = cli.profile(player)
+        end
         choice = cli.menu
     elsif choice == "view leader boards"
         menu_input = cli.leader_board(player)
@@ -39,6 +45,6 @@ until choice == "exit" do
         choice = cli.menu
     end
   end 
-cli.exit(player)
+cli.exit_trivia(player)
 #Pry.start
 

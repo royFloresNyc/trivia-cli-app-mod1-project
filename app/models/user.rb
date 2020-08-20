@@ -48,10 +48,11 @@ class User < ActiveRecord::Base
 
     def self.top_ten_by_points
         users = User.order(total_points: :desc).limit(10)
-        table = TTY::Table.new ['username','total points'], [["","" ]]
-
+        table = TTY::Table.new ['position','username','total points'], [["","",""]]
+        index = 1
         users.map do |user|
-            table << ["#{user.username}", "#{user.total_points}"]
+            table << ["#{index}", "#{user.username}", "#{user.total_points}"]
+            index += 1
         end
         table.render(:ascii, padding: [0,1,0,1])
     end
@@ -81,9 +82,11 @@ class User < ActiveRecord::Base
     end
 
     def self.top_ten_by_percentage_correct 
-        table = TTY::Table.new ['username','percent correct'], [["","" ]]
-        user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.reverse.map do |user|
-             table << ["#{user.username}","#{user.percentage_correct}"]
+        table = TTY::Table.new ['position','username','percent correct'], [["","","" ]]
+        index = 1
+        user_percentages = User.all.sort {|a, b| a.percentage_correct <=> b.percentage_correct }.reverse.take(10).map do |user|
+             table << ["#{index}","#{user.username}","#{user.percentage_correct}"]
+             index += 1
         end
         table.render(:ascii, padding: [0,1,0,1])
     end 

@@ -28,7 +28,7 @@ until choice == "exit" do
         end
         choice = cli.menu
     elsif choice == "view profile"
-        player.view_profile
+        cli.view_profile(player)
         choice = cli.menu
     elsif choice == "view leader boards"
         menu_input = cli.leader_board(player)

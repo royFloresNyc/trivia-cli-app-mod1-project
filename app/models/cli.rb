@@ -1,5 +1,6 @@
 require "tty-prompt"
 require 'pry'
+#require 'activerecord'
 
 class CLI 
   
@@ -100,6 +101,32 @@ class CLI
         puts "\nThanks for playing #{player.username}, see you next time!"
         
     end
+
+    def view_profile(user)
+        table = TTY::Table.new [['username', "#{user.username}"],["total points","#{user.total_points}"],["level","#{user.level}"],["chances", "#{user.chances}"], ["current ranking", "#{user.current_ranking}"]]
+        puts table.render(:ascii, padding: [0,1,0,1])
+    end
+
+    # def update_username(user)
+    #     prompt = TTY::Prompt.new(active_color: :cyan)
+    #     new_username = prompt.select("\nPlease enter a new username:")
+    #     check_user = User.find_by(username: username)
+    #     if check_user
+    #         puts "\nSorry, that username already exists."
+    #         self.update_username(user)
+    #     else
+    #         user.username = new_username
+    #         user.save
+    #         user
+    #     end
+    # end
+
+    # def update_password(user)
+
+    # end
+
+    # def delete_profile(user)
+    # end
 
 end
 

@@ -133,9 +133,9 @@ class CLI
         elsif input == "Top 10 by Percentage Correct"
             puts User.top_ten_by_percentage_correct
             input = self.leader_board(user)
-        elsif input == "Main Menu"
+        else 
             self.clear
-            "Main Menu"
+            input
         end 
     end   
 

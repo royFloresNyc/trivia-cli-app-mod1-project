@@ -131,7 +131,7 @@ class User < ActiveRecord::Base
         end
         
         if answered_correctly.count >= 10
-            self.level += e1
+            self.level += 1
             self.save
             puts "\nYou've leveled up! You're now on level #{self.level}!"
         else

@@ -61,10 +61,13 @@ class CLI
                 sleep(5)
                 self.clear
             else
+                self.clear
                 return "Main Menu"
             end 
         end 
         puts "\nYou've run out of chances! Better luck next time."
+        sleep(3)
+        self.clear
         return "Main Menu"
     end
 
@@ -107,6 +110,7 @@ class CLI
                 exit
             end 
         end
+        self.clear
         input 
     end
 
@@ -130,6 +134,7 @@ class CLI
             puts User.top_ten_by_percentage_correct
             input = self.leader_board(user)
         elsif input == "Main Menu"
+            self.clear
             "Main Menu"
         end 
     end   

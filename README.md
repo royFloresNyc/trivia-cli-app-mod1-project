@@ -1,6 +1,5 @@
-## trivia-mod1-project
-
-# Welcome to trivia!
+# Welcome to TRIVIA!
+---
 
 A game to test your knowledge about random facts.
 
@@ -8,6 +7,8 @@ A game to test your knowledge about random facts.
 
 - clone down
 - run bundle install
+- run `ruby run.rb`
+- play!
 
 **Functionalities**
 
@@ -23,7 +24,7 @@ A game to test your knowledge about random facts.
         - Science & Nature
         - Entertainment - Television
     - User receives randomly selected questions based on user's level
-    _ Questions are a mix of "True of False" and "Multiple choice" 
+    - Questions are a mix of "True of False" and "Multiple choice" 
     - Game is programmed so that users will not receive the same question more than once
     - User's points get updated for every correctly answered question
     - User has 3 chances upon log-in, and chances are deducted when User answers incorrectly

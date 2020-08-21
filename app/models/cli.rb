@@ -1,5 +1,3 @@
-require "tty-prompt"
-
 class CLI 
   
     def clear
@@ -142,7 +140,6 @@ class CLI
     def exit_trivia(player)
         self.clear
         puts "\nThanks for playing #{player.username}, see you next time!"
-        
     end
    
 end

@@ -1,10 +1,6 @@
-require 'pry'
-require_relative 'cli.rb'
-
 class User < ActiveRecord::Base
     has_many :answered_questions
     has_many :questions, through: :answered_questions
-
 
     def self.sign_up
         prompt = TTY::Prompt.new(active_color: :cyan)

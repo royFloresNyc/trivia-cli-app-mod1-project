@@ -18,20 +18,14 @@ choice = cli.menu
 until choice == "Exit" do
     cli.clear 
     if choice == "PLAY"
-        menu_input = cli.play(player)
-        if menu_input == "Main Menu"
-            choice = cli.menu
-        end
+        cli.play(player)
+        choice = cli.menu
     elsif choice == "Profile Settings"
-        menu_input = cli.profile(player)
-        if menu_input == "Main Menu"
-            choice = cli.menu
-        end
+        cli.profile(player)
+        choice = cli.menu
     elsif choice == "View Leader Boards"
-        menu_input = cli.leader_board(player)
-        if menu_input == "Main Menu"
-            choice = cli.menu
-        end
+        cli.leader_board(player)
+        choice = cli.menu
     end
 
   end 

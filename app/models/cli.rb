@@ -14,7 +14,7 @@ class CLI
             menu.choice "Log-in"
             menu.choice "Sign-up"
         end
-        choice == "sign-up" ? player = User.sign_up : player = User.log_in
+        choice == "Sign-up" ? User.sign_up : User.log_in
     end
 
     def menu

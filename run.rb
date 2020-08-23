@@ -27,7 +27,7 @@ until choice == "Exit" do
         cli.leader_board(player)
         choice = cli.menu
     end
+end 
 
-  end 
 cli.exit_trivia(player)
 
